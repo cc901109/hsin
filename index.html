@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Hsin | Engineering Portfolio</title>
+  <meta
+    name="description"
+    content="Engineering portfolio focused on systems, platform engineering, networking, automation, and performance validation."
+  >
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="#top">
+        <span class="brand-mark"></span>
+        <span>HSIN / ENGINEERING</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#work">Work</a>
+        <a href="#experience">Experience</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+
+  <main id="top">
+
+    <!-- Hero -->
+    <section class="hero container">
+
+      <div class="hero-content">
+
+        <p class="eyebrow">
+          SYSTEMS · PLATFORM · NETWORKING · AUTOMATION
+        </p>
+
+        <h1>
+          從實際問題出發，<br>
+          <span>把系統做出來。</span>
+        </h1>
+
+        <p class="hero-description">
+          自動化測試開發工程師。關注 Container、Linux Networking、
+          Platform Engineering 與系統效能。
+          習慣從需求、架構與限制出發，透過 Survey、PoC 與驗證，
+          把陌生問題拆解成可落地的工程方案。
+        </p>
+
+        <div class="hero-actions">
+          <a class="button primary" href="#work">
+            View Selected Work
+          </a>
+
+          <a class="button secondary" href="#about">
+            About Me
+          </a>
+        </div>
+
+      </div>
+
+
+      <div class="hero-panel">
+
+        <div class="terminal-top">
+          <span></span>
+          <span></span>
+          <span></span>
+
+          <p>engineering.profile</p>
+        </div>
+
+        <div class="terminal-content">
+
+          <p>
+            <span class="terminal-key">role</span>
+            <span class="terminal-value">
+              Automation Test Development Engineer
+            </span>
+          </p>
+
+          <p>
+            <span class="terminal-key">focus</span>
+            <span class="terminal-value">
+              Systems / Platform / Networking
+            </span>
+          </p>
+
+          <p>
+            <span class="terminal-key">workflow</span>
+            <span class="terminal-value">
+              Survey → PoC → Integration → Validation
+            </span>
+          </p>
+
+          <p>
+            <span class="terminal-key">platform</span>
+            <span class="terminal-value">
+              Kubernetes / Linux / Container
+            </span>
+          </p>
+
+          <div class="terminal-status">
+            <span class="status-dot"></span>
+            Engineering Portfolio
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Metrics -->
+    <section class="metrics container">
+
+      <div class="metric">
+        <strong>05</strong>
+        <span>Selected Cases</span>
+      </div>
+
+      <div class="metric">
+        <strong>K8s</strong>
+        <span>Platform & Container</span>
+      </div>
+
+      <div class="metric">
+        <strong>10GbE</strong>
+        <span>Performance Testing</span>
+      </div>
+
+    </section>
+
+
+    <!-- Selected Work -->
+    <section class="section container" id="work">
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SELECTED WORK</p>
+          <h2>Engineering Cases</h2>
+        </div>
+
+        <p>
+          以實際工程問題為核心，整理需求、限制條件、
+          技術分析、架構設計與驗證方式。
+        </p>
+      </div>
+
+
+      <div class="projects">
+
+        <!-- Project 01 -->
+        <article class="project-card featured">
+
+          <div class="project-number">01</div>
+
+          <div class="project-body">
+
+            <p class="project-type">
+              SYSTEMS / NETWORKING
+            </p>
+
+            <h3>
+              Kubernetes × Physical DUT Network
+            </h3>
+
+            <p>
+              將原本單機 Docker 測試環境遷移至 Kubernetes 後，
+              Test Pod 仍需連接實體 DUT 測試網路並取得 DUT-side DHCP。
+              透過 Kubernetes Multi-Network 架構設計，
+              建立 Container 與實體測試網路之間的連接方式。
+            </p>
+
+            <div class="architecture-line">
+              <span>Pod</span>
+              <b>→</b>
+              <span>Multus</span>
+              <b>→</b>
+              <span>NAD</span>
+              <b>→</b>
+              <span>macvlan</span>
+              <b>→</b>
+              <span>DHCP</span>
+              <b>→</b>
+              <span>DUT</span>
+            </div>
+
+            <div class="tags">
+              <span>Kubernetes</span>
+              <span>Multus CNI</span>
+              <span>NAD</span>
+              <span>macvlan</span>
+              <span>DHCP</span>
+            </div>
+
+          </div>
+
+        </article>
+
+
+        <!-- Project 02 -->
+        <article class="project-card">
+
+          <div class="project-number">02</div>
+
+          <div class="project-body">
+
+            <p class="project-type">
+              PLATFORM / DEVOPS
+            </p>
+
+            <h3>
+              Automation Platform
+            </h3>
+
+            <p>
+              參與 Container-based automation platform 的部署與整合，
+              處理平台架構、服務部署、Jenkins 管理與 CI/CD 流程，
+              並與不同測試工具及服務進行整合。
+            </p>
+
+            <div class="tags">
+              <span>KubeSphere</span>
+              <span>Kubernetes</span>
+              <span>Jenkins</span>
+              <span>CI/CD</span>
+            </div>
+
+          </div>
+
+        </article>
+
+
+        <!-- Project 03 -->
+        <article class="project-card">
+
+          <div class="project-number">03</div>
+
+          <div class="project-body">
+
+            <p class="project-type">
+              PERFORMANCE / NETWORKING
+            </p>
+
+            <h3>
+              10GbE Performance Validation
+            </h3>
+
+            <p>
+              針對 10GbE 網路效能進行驗證與問題分析，
+              從 Traffic Generator、DPDK、Linux Kernel、
+              NIC 到 Container 環境逐層檢視系統行為與效能影響。
+            </p>
+
+            <div class="tags">
+              <span>TRex</span>
+              <span>DPDK</span>
+              <span>Linux</span>
+              <span>10GbE</span>
+            </div>
+
+          </div>
+
+        </article>
+
+
+        <!-- Project 04 -->
+        <article class="project-card">
+
+          <div class="project-number">04</div>
+
+          <div class="project-body">
+
+            <p class="project-type">
+              CLOUD / INFRASTRUCTURE
+            </p>
+
+            <h3>
+              Cloud Infrastructure PoC
+            </h3>
+
+            <p>
+              在企業實習期間接觸 Cloud Infrastructure 與 IaC，
+              透過文件研究、PoC 與實際部署，
+              建立 Azure、Docker、Terraform 與
+              Continuous Delivery 的實作經驗。
+            </p>
+
+            <div class="tags">
+              <span>Azure</span>
+              <span>Docker</span>
+              <span>Terraform</span>
+              <span>IaC</span>
+            </div>
+
+          </div>
+
+        </article>
+
+
+        <!-- Project 05 -->
+        <article class="project-card">
+
+          <div class="project-number">05</div>
+
+          <div class="project-body">
+
+            <p class="project-type">
+              UNIVERSITY PROJECT
+            </p>
+
+            <h3>
+              Posture Detection Application
+            </h3>
+
+            <p>
+              大學專題以姿勢辨識應用為主題。
+              負責 Android App 功能頁面與 UI 設計，
+              使用 Figma 規劃介面，並以 Kotlin
+              完成個人化功能與深淺色模式，參與系統整合。
+            </p>
+
+            <div class="tags">
+              <span>Android</span>
+              <span>Kotlin</span>
+              <span>Figma</span>
+              <span>System Integration</span>
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- Experience -->
+    <section class="section container" id="experience">
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">EXPERIENCE</p>
+          <h2>Engineering Journey</h2>
+        </div>
+      </div>
+
+
+      <div class="timeline">
+
+        <article class="timeline-item">
+
+          <div class="timeline-label">
+            CURRENT
+          </div>
+
+          <div>
+            <h3>自動化測試開發工程師</h3>
+
+            <p>
+              Kubernetes / KubeSphere 平台建置與維運、
+              Automation、CI/CD、網路與效能驗證，
+              並進行測試工具與服務整合。
+            </p>
+          </div>
+
+        </article>
+
+
+        <article class="timeline-item">
+
+          <div class="timeline-label">
+            2024
+          </div>
+
+          <div>
+            <h3>AUO A Pro 學期實習</h3>
+
+            <p>
+              從 Cloud 與 Container 基礎開始，
+              透過技術文件、Mentor 指導與 PoC，
+              完成 Azure、Docker、Terraform、
+              IaC 與 Continuous Delivery 相關實作。
+            </p>
+          </div>
+
+        </article>
+
+
+        <article class="timeline-item">
+
+          <div class="timeline-label">
+            UNIVERSITY
+          </div>
+
+          <div>
+            <h3>國立屏東大學 · 資訊管理學系</h3>
+
+            <p>
+              參與姿勢辨識 Android 應用專題，
+              負責 App 功能頁面、UI 設計與部分功能開發，
+              並參與團隊系統整合。
+            </p>
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- About -->
+    <section class="section container" id="about">
+
+      <div class="about-grid">
+
+        <div>
+          <p class="eyebrow">ENGINEERING APPROACH</p>
+
+          <h2>
+            Engineering is more than
+            making a tool run.
+          </h2>
+        </div>
+
+
+        <div class="about-content">
+
+          <p>
+            在實際工程工作中，我逐漸將重點從「工具如何使用」
+            延伸到「系統為什麼這樣運作」。
+            當 Container、Network、Host、Physical Device
+            與 Automation Platform 同時存在時，
+            問題往往不是單一工具本身，而是不同系統層之間的互動。
+          </p>
+
+          <p>
+            因此面對陌生需求時，我通常先釐清系統邊界與限制，
+            再進行技術調研與方案比較，透過 PoC 驗證可行性，
+            最後完成實作、整合與驗證。
+          </p>
+
+
+          <div class="process">
+
+            <span>需求釐清</span>
+            <b>→</b>
+            <span>架構分析</span>
+            <b>→</b>
+            <span>技術調研</span>
+            <b>→</b>
+            <span>PoC</span>
+            <b>→</b>
+            <span>實作整合</span>
+            <b>→</b>
+            <span>驗證</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Highlights -->
+    <section class="section container">
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">HIGHLIGHTS</p>
+          <h2>Background</h2>
+        </div>
+      </div>
+
+
+      <div class="highlights">
+
+        <div class="highlight-card">
+          <span>01</span>
+          <h3>National 3rd Place</h3>
+          <p>資訊服務競賽 · 影像辨識組</p>
+        </div>
+
+        <div class="highlight-card">
+          <span>02</span>
+          <h3>Research Recognition</h3>
+          <p>專題相關研究成果 · 研究創作獎</p>
+        </div>
+
+        <div class="highlight-card">
+          <span>03</span>
+          <h3>NPTU</h3>
+          <p>國立屏東大學 · 資訊管理學系</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Contact -->
+    <section class="contact-section" id="contact">
+
+      <div class="container contact-inner">
+
+        <div>
+          <p class="eyebrow">CONTACT</p>
+
+          <h2>
+            Hsin's<br>
+            Engineering Portfolio
+          </h2>
+        </div>
+
+
+        <div class="contact-info">
+
+          <p>
+            Systems · Platform · Networking · Automation
+          </p>
+
+          <a href="https://github.com/cc901109">
+            github.com/cc901109
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+
+    <div class="container footer-inner">
+      <p>© Hsin · Engineering Portfolio</p>
+      <p>Built for GitHub Pages</p>
+    </div>
+
+  </footer>
+
+</body>
+</html>
