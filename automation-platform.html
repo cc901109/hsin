@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Automation Platform | Hsin</title>
+
+  <meta
+    name="description"
+    content="Engineering case study about container-based automation platform deployment, Jenkins CI/CD, service integration, and platform operations."
+  >
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <nav class="nav container">
+
+    <a class="brand" href="./index.html">
+      <span class="brand-mark"></span>
+      <span>HSIN / ENGINEERING</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="./index.html#work">Work</a>
+      <a href="./index.html#experience">Experience</a>
+      <a href="./index.html#about">About</a>
+      <a href="./index.html#contact">Contact</a>
+    </div>
+
+  </nav>
+</header>
+
+
+<main>
+
+  <!-- Hero -->
+  <section class="case-hero container">
+
+    <a class="back-link" href="./index.html#work">
+      ← Back to Selected Work
+    </a>
+
+    <p class="eyebrow">
+      CASE STUDY 02 · PLATFORM / DEVOPS
+    </p>
+
+    <h1>
+      Automation<br>
+      <span>Platform</span>
+    </h1>
+
+    <p class="case-lead">
+      隨著自動化測試服務與工具逐步增加，
+      平台需要處理的不只是單一工具部署，
+      而是 Container、CI/CD、測試服務與不同功能模組之間的整合。
+      我參與 Container-based Automation Platform 的建置與維運，
+      並負責平台部署、工具導入、Automation、Jenkins 管理
+      與相關架構整合工作。
+    </p>
+
+    <div class="case-meta">
+
+      <div>
+        <span>ROLE</span>
+        <strong>Platform / Integration / Administration</strong>
+      </div>
+
+      <div>
+        <span>STACK</span>
+        <strong>Kubernetes / KubeSphere / Jenkins</strong>
+      </div>
+
+      <div>
+        <span>FOCUS</span>
+        <strong>Automation Platform Integration</strong>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Context -->
+  <section class="case-section container">
+
+    <div class="case-section-label">
+      01 / CONTEXT
+    </div>
+
+    <div class="case-content">
+
+      <h2>
+        當測試工具增加，
+        問題開始從 Tool 變成 Platform。
+      </h2>
+
+      <p>
+        自動化測試環境包含不同用途的服務與工具，
+        各自負責特定測試功能。
+        當這些元件逐步 Containerize 並整合至共同平台後，
+        工程問題不再只是「某個服務能不能啟動」，
+        而是如何讓多個元件能夠穩定部署、協同運作，
+        並納入一致的 Automation 與維運流程。
+      </p>
+
+      <p>
+        因此平台需要同時考量 Container Runtime、
+        Kubernetes Workload、CI/CD、服務設定、
+        元件相依關係，以及後續維運方式。
+      </p>
+
+      <div class="case-callout">
+
+        <span>ENGINEERING QUESTION</span>
+
+        <p>
+          如何建立一個能承載多種 Automation Services，
+          並讓部署、CI/CD、設定與服務整合具備一致性的
+          Container-based Platform？
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Responsibilities -->
+  <section class="case-section container">
+
+    <div class="case-section-label">
+      02 / RESPONSIBILITY
+    </div>
+
+    <div class="case-content">
+
+      <h2>
+        我的工作不只是在平台上部署服務。
+      </h2>
+
+      <p>
+        在平台相關工作中，我主要負責 Container Platform 的部署，
+        並參與工具選型、架構規劃、自動化與服務整合。
+        同時擔任 Jenkins Service Administration，
+        因此需要理解從平台基礎環境到 CI/CD
+        以及各測試服務之間的整體關係。
+      </p>
+
+      <div class="responsibility-grid">
+
+        <div class="responsibility-card">
+          <span>01</span>
+          <h3>Platform Deployment</h3>
+          <p>
+            建置與維護 Kubernetes / KubeSphere
+            Container Platform，作為測試服務的執行基礎。
+          </p>
+        </div>
+
+        <div class="responsibility-card">
+          <span>02</span>
+          <h3>Tool & Service Integration</h3>
+          <p>
+            依照測試需求評估工具與服務的部署方式，
+            並處理不同元件之間的整合。
+          </p>
+        </div>
+
+        <div class="responsibility-card">
+          <span>03</span>
+          <h3>Jenkins Administration</h3>
+          <p>
+            負責 Jenkins Service Administration，
+            支援 CI/CD 與 Automation Workflow 的運作。
+          </p>
+        </div>
+
+        <div class="responsibility-card">
+          <span>04</span>
+          <h3>Architecture & Automation</h3>
+          <p>
+            從需求與元件相依關係出發，
+            規劃部署、Automation 與整合方式。
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Architecture -->
+  <section class="case-section container">
+
+    <div class="case-section-label">
+      03 / ARCHITECTURE
+    </div>
+
+    <div class="case-content">
+
+      <h2>
+        把不同工具放進同一個平台，
+        不代表它們已經完成整合。
+      </h2>
+
+      <p>
+        平台的角色是提供共同的執行與管理基礎，
+        Jenkins 負責 Automation Workflow 與 CI/CD，
+        各測試服務則依照自身功能在 Container Environment 中執行。
+        真正需要處理的是這些層之間的介面、設定與相依關係。
+      </p>
+
+      <div class="platform-architecture">
+
+        <div class="platform-layer platform-entry">
+          <small>AUTOMATION ENTRY</small>
+          <strong>Jenkins / CI/CD</strong>
+          <p>Pipeline · Trigger · Automation Workflow</p>
+        </div>
+
+        <div class="platform-connector">↓</div>
+
+        <div class="platform-layer platform-core">
+          <small>PLATFORM LAYER</small>
+          <strong>KubeSphere / Kubernetes</strong>
+          <p>Workload · Deployment · Service · Container</p>
+        </div>
+
+        <div class="platform-connector">↓</div>
+
+        <div class="service-row">
+
+          <div class="service-node">
+            <small>SERVICE A</small>
+            <strong>Testing Tool</strong>
+          </div>
+
+          <div class="service-node">
+            <small>SERVICE B</small>
+            <strong>Automation Service</strong>
+          </div>
+
+          <div class="service-node">
+            <small>SERVICE C</small>
+            <strong>Supporting Tool</strong>
+          </div>
+
+        </div>
+
+        <div class="platform-connector">↓</div>
+
+        <div class="platform-layer">
+          <small>INTEGRATION</small>
+          <strong>Configuration / Data / Interfaces</strong>
+          <p>Shared dependencies and integration flow</p>
+        </div>
+
+      </div>
+
+      <div class="architecture-summary">
+        <code>
+          CI/CD → Container Platform → Services → Integration → Test Workflow
+        </code>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Engineering Process -->
+  <section class="case-section container">
+
+    <div class="case-section-label">
+      04 / PROCESS
+    </div>
+
+    <div class="case-content">
+
+      <h2>
+        先理解服務怎麼互動，
+        再決定怎麼部署。
+      </h2>
+
+      <p>
+        面對新的 Tool 或 Service 時，
+        我會先確認它在整體測試流程中的角色、
+        需要的資源、外部相依與其他服務的互動方式，
+        再評估 Containerization 與 Platform Integration 的方案。
+      </p>
+
+      <div class="analysis-flow">
+
+        <div>
+          <span>01</span>
+          <strong>Requirement</strong>
+          <p>確認功能需求與服務在測試流程中的角色</p>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div>
+          <span>02</span>
+          <strong>Survey</strong>
+          <p>評估工具、部署方式與技術限制</p>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div>
+          <span>03</span>
+          <strong>Integration</strong>
+          <p>處理 Container、設定與服務相依關係</p>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div>
+          <span>04</span>
+          <strong>Automation</strong>
+          <p>納入 Jenkins 與既有 Automation Workflow</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Collaboration -->
+  <section class="case-section container">
+
+    <div class="case-section-label">
+      05 / COLLABORATION
+    </div>
+
+    <div class="case-content">
+
+      <h2>
+        Platform Integration
+        本身就是跨元件協作。
+      </h2>
+
+      <p>
+        團隊成員分別負責不同的測試工具與功能模組。
+        在整合過程中，我會與相關成員確認工具的核心用途、
+        使用需求、服務之間的依賴，以及資料與設定如何交換。
+      </p>
+
+      <p>
+        當多個服務需要共同運作時，
+        也需要討論架構、整合順序與介面，
+        避免單一元件雖然能獨立執行，
+        但無法順利進入完整的 Automation Workflow。
+      </p>
+
+      <div class="collaboration-map">
+
+        <div class="collaboration-side">
+          <span>TOOL OWNERS</span>
+          <strong>Functions & Requirements</strong>
+        </div>
+
+        <div class="collaboration-center">
+          <small>PLATFORM INTEGRATION</small>
+          <strong>Architecture</strong>
+          <strong>Deployment</strong>
+          <strong>Automation</strong>
+        </div>
+
+        <div class="collaboration-side">
+          <span>WORKFLOW</span>
+          <strong>Interfaces & Dependencies</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Validation -->
+  <section class="case-section container">
+
+    <div class="case-section-label">
+      06 / VALIDATION
+    </div>
+
+    <div class="case-content">
+
+      <h2>
+        驗證的是完整 Workflow，
+        而不是單一 Container。
+      </h2>
+
+      <p>
+        Platform Integration 完成後，
+        驗證範圍會從單一 Service 是否正常啟動，
+        延伸到服務相依、Pipeline 執行、
+        Automation Workflow 與實際測試流程是否能正確串接。
+      </p>
+
+      <div class="validation-list">
+
+        <div>
+          <span>✓</span>
+          <p>Containerized Service 可在 Platform 正常部署與執行</p>
+        </div>
+
+        <div>
+          <span>✓</span>
+          <p>服務設定與必要相依關係可正確整合</p>
+        </div>
+
+        <div>
+          <span>✓</span>
+          <p>Jenkins / CI/CD 可與相關 Automation Flow 串接</p>
+        </div>
+
+        <div>
+          <span>✓</span>
+          <p>不同測試服務能進入完整的平台工作流程</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Takeaway -->
+  <section class="case-section case-final container">
+
+    <div class="case-section-label">
+      07 / TAKEAWAY
+    </div>
+
+    <div class="case-content">
+
+      <h2>
+        Platform Engineering 的重點，
+        是讓元件能夠一起運作。
+      </h2>
+
+      <p>
+        這段經驗讓我從單一工具的部署，
+        進一步理解 Container Platform、
+        CI/CD、Automation 與各種 Testing Services
+        之間的系統關係。
+      </p>
+
+      <p>
+        對我而言，平台建置並不是把多個工具集中放在 Kubernetes 上，
+        而是需要理解每個元件的角色與限制，
+        並透過架構、部署方式、Automation 與介面設計，
+        讓它們形成可持續運作的整體系統。
+      </p>
+
+      <div class="public-note">
+
+        <strong>PUBLIC PORTFOLIO NOTE</strong>
+
+        <p>
+          本案例僅描述一般化的平台架構與個人負責範圍。
+          實際企業服務名稱、內部 URL、帳號與權限資訊、
+          Pipeline 設定、產品資訊、原始碼及非公開資料均未揭露。
+        </p>
+
+      </div>
+
+      <a
+        class="button secondary case-back-button"
+        href="./index.html#work"
+      >
+        ← Back to Selected Work
+      </a>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <div class="container footer-inner">
+    <p>© Hsin · Engineering Portfolio</p>
+    <p>Systems · Platform · Networking · Automation</p>
+  </div>
+
+</footer>
+
+</body>
+</html>
