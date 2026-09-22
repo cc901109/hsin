@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kubernetes × Physical DUT Network | Hsin</title>
+
+  <meta
+    name="description"
+    content="Engineering case study: integrating Kubernetes workloads with a physical DUT network through Multus CNI, NetworkAttachmentDefinition, macvlan, and DHCP."
+  >
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <header class="site-header">
+    <nav class="nav container">
+
+      <a class="brand" href="./index.html">
+        <span class="brand-mark"></span>
+        <span>HSIN / ENGINEERING</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="./index.html#work">Work</a>
+        <a href="./index.html#experience">Experience</a>
+        <a href="./index.html#about">About</a>
+        <a href="./index.html#contact">Contact</a>
+      </div>
+
+    </nav>
+  </header>
+
+
+  <main>
+
+    <!-- Case Hero -->
+    <section class="case-hero container">
+
+      <a class="back-link" href="./index.html#work">
+        ← Back to Selected Work
+      </a>
+
+      <p class="eyebrow">
+        CASE STUDY 01 · SYSTEMS / NETWORKING
+      </p>
+
+      <h1>
+        Kubernetes ×<br>
+        <span>Physical DUT Network</span>
+      </h1>
+
+      <p class="case-lead">
+        當原本建立於單機 Docker 環境的產品測試流程遷移至
+        Kubernetes，Test Pod 除了需要保留 Kubernetes 原有的
+        Pod Network，也必須能夠連接實體 DUT 測試網路，
+        並從 DUT-side DHCP 取得測試所需的網路位址。
+      </p>
+
+
+      <div class="case-meta">
+
+        <div>
+          <span>ROLE</span>
+          <strong>Architecture / PoC / Integration</strong>
+        </div>
+
+        <div>
+          <span>STACK</span>
+          <strong>Kubernetes / Multus / macvlan</strong>
+        </div>
+
+        <div>
+          <span>FOCUS</span>
+          <strong>Multi-Network Integration</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Overview -->
+    <section class="case-section container">
+
+      <div class="case-section-label">
+        01 / CONTEXT
+      </div>
+
+      <div class="case-content">
+
+        <h2>
+          從單機 Container Network，
+          到 Kubernetes Multi-Network。
+        </h2>
+
+        <p>
+          原有測試環境以單機 Docker 為基礎，
+          Container 可以透過 Host 上既有的測試網路，
+          與實體產品（DUT）進行連線。
+        </p>
+
+        <p>
+          當測試服務逐步移往 Kubernetes 後，
+          網路模型產生了根本性的差異。
+          Pod 預設透過 Kubernetes CNI 加入 Cluster Pod Network，
+          但產品測試所需要的網路並不是單純的 Cluster 內部通訊，
+          而是必須進一步連接至實體 DUT 所在的測試網路。
+        </p>
+
+        <div class="case-callout">
+          <span>ENGINEERING QUESTION</span>
+
+          <p>
+            如何在保留 Kubernetes 預設 Pod Network 的同時，
+            為 Test Pod 增加另一個可直接進入 Physical DUT Network
+            的網路介面？
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Constraints -->
+    <section class="case-section container">
+
+      <div class="case-section-label">
+        02 / CONSTRAINTS
+      </div>
+
+      <div class="case-content">
+
+        <h2>
+          問題不只是「讓 Pod 能上網」。
+        </h2>
+
+        <p>
+          這個需求的核心並非一般 Kubernetes Service-to-Service
+          通訊，而是 Container、Host Network 與實體測試設備之間的整合。
+          因此設計時需要先拆開不同的網路邊界。
+        </p>
+
+
+        <div class="constraint-grid">
+
+          <div class="constraint-card">
+            <span>01</span>
+            <h3>保留 Pod Network</h3>
+            <p>
+              Test Pod 仍需要 Kubernetes 預設網路，
+              用於平台內部服務與 Cluster 通訊。
+            </p>
+          </div>
+
+          <div class="constraint-card">
+            <span>02</span>
+            <h3>第二張 Network Interface</h3>
+            <p>
+              測試流量需要走獨立介面，
+              不能單純以預設 Pod Interface 取代。
+            </p>
+          </div>
+
+          <div class="constraint-card">
+            <span>03</span>
+            <h3>Physical DUT Network</h3>
+            <p>
+              Container 必須實際進入與 DUT 相連的實體測試網路，
+              而非只存在於 Kubernetes Overlay Network。
+            </p>
+          </div>
+
+          <div class="constraint-card">
+            <span>04</span>
+            <h3>DUT-side DHCP</h3>
+            <p>
+              額外的測試介面需要透過 DUT-side DHCP
+              取得對應測試網段的 IP。
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Analysis -->
+    <section class="case-section container">
+
+      <div class="case-section-label">
+        03 / ANALYSIS
+      </div>
+
+      <div class="case-content">
+
+        <h2>
+          先確認系統邊界，再選擇技術。
+        </h2>
+
+        <p>
+          面對這個問題時，我先釐清 Kubernetes 預設 CNI、
+          Node Physical NIC、Container Interface 與 DUT Network
+          各自負責的範圍，再調研 Kubernetes Multi-Network
+          相關方案。
+        </p>
+
+        <p>
+          核心需求是讓一個 Pod 同時存在於兩個不同的網路環境：
+          一個維持 Kubernetes 原本的 Pod Network，
+          另一個則專門承載實體產品測試流量。
+        </p>
+
+
+        <div class="analysis-flow">
+
+          <div>
+            <span>01</span>
+            <strong>Identify</strong>
+            <p>釐清 Pod、Node 與 DUT 之間的網路邊界</p>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div>
+            <span>02</span>
+            <strong>Survey</strong>
+            <p>調研 Kubernetes Multi-Network 方案</p>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div>
+            <span>03</span>
+            <strong>PoC</strong>
+            <p>驗證額外 Network Interface 與 DHCP</p>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div>
+            <span>04</span>
+            <strong>Integrate</strong>
+            <p>整合至 Container-based 測試環境</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Architecture -->
+    <section class="case-section container">
+
+      <div class="case-section-label">
+        04 / ARCHITECTURE
+      </div>
+
+      <div class="case-content">
+
+        <h2>
+          Multus CNI 作為 Multi-Network 的入口。
+        </h2>
+
+        <p>
+          最終架構採用 Multus CNI，
+          讓 Test Pod 在 Kubernetes 預設網路之外，
+          依據 NetworkAttachmentDefinition
+          建立額外的網路介面。
+        </p>
+
+
+        <div class="architecture-diagram">
+
+          <div class="architecture-node primary-node">
+            <small>WORKLOAD</small>
+            <strong>Test Pod</strong>
+            <span>Default Interface + Secondary Interface</span>
+          </div>
+
+          <div class="architecture-arrow">↓</div>
+
+          <div class="architecture-node">
+            <small>MULTI-NETWORK</small>
+            <strong>Multus CNI</strong>
+            <span>Attach additional network</span>
+          </div>
+
+          <div class="architecture-arrow">↓</div>
+
+          <div class="architecture-node">
+            <small>CONFIGURATION</small>
+            <strong>NetworkAttachmentDefinition</strong>
+            <span>Define secondary network</span>
+          </div>
+
+          <div class="architecture-arrow">↓</div>
+
+          <div class="architecture-node">
+            <small>NETWORK</small>
+            <strong>macvlan + DHCP</strong>
+            <span>Secondary interface & IP assignment</span>
+          </div>
+
+          <div class="architecture-arrow">↓</div>
+
+          <div class="architecture-node accent-node">
+            <small>PHYSICAL TEST NETWORK</small>
+            <strong>DUT Network</strong>
+            <span>Product-side test environment</span>
+          </div>
+
+        </div>
+
+
+        <div class="architecture-summary">
+
+          <code>
+            Kubernetes Pod → Multus CNI → NAD → macvlan → DHCP → DUT Network
+          </code>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Implementation -->
+    <section class="case-section container">
+
+      <div class="case-section-label">
+        05 / IMPLEMENTATION
+      </div>
+
+      <div class="case-content">
+
+        <h2>
+          把 Kubernetes Network Model
+          對接既有測試需求。
+        </h2>
+
+        <p>
+          Multus 負責讓 Pod 能夠附加額外的 Network，
+          NetworkAttachmentDefinition 則描述該網路的設定。
+          Secondary Network 使用 macvlan，
+          讓 Container 的額外介面能夠進入實體測試網路。
+        </p>
+
+        <p>
+          IP 配置則配合 DUT-side DHCP，
+          使 Test Pod 的測試介面能依照實際產品測試環境取得位址，
+          而 Kubernetes 原有的 Default Interface
+          仍維持原本 Cluster Network 的功能。
+        </p>
+
+
+        <div class="interface-view">
+
+          <div class="interface-box">
+            <span>eth0</span>
+            <strong>Pod Network</strong>
+            <p>Kubernetes / Platform Communication</p>
+          </div>
+
+          <div class="interface-plus">+</div>
+
+          <div class="interface-box active">
+            <span>net1</span>
+            <strong>DUT Test Network</strong>
+            <p>macvlan / DHCP / Physical Device</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Validation -->
+    <section class="case-section container">
+
+      <div class="case-section-label">
+        06 / VALIDATION
+      </div>
+
+      <div class="case-content">
+
+        <h2>
+          驗證重點是整條資料路徑，
+          而不是單一元件是否啟動。
+        </h2>
+
+        <p>
+          PoC 與整合過程中，驗證的重點包含 Pod 是否成功取得
+          Secondary Interface、是否能透過 DUT-side DHCP
+          取得測試網段 IP，以及 Container 到 Physical DUT Network
+          的連線是否符合測試需求。
+        </p>
+
+
+        <div class="validation-list">
+
+          <div>
+            <span>✓</span>
+            <p>Test Pod 保留 Kubernetes Default Network</p>
+          </div>
+
+          <div>
+            <span>✓</span>
+            <p>Pod 成功建立額外 Secondary Network Interface</p>
+          </div>
+
+          <div>
+            <span>✓</span>
+            <p>Secondary Interface 可透過 DUT-side DHCP 取得 IP</p>
+          </div>
+
+          <div>
+            <span>✓</span>
+            <p>Container 可透過獨立測試網路與 Physical DUT 連線</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Takeaway -->
+    <section class="case-section case-final container">
+
+      <div class="case-section-label">
+        07 / TAKEAWAY
+      </div>
+
+      <div class="case-content">
+
+        <h2>
+          從「網路設定問題」，
+          轉化成「系統架構問題」。
+        </h2>
+
+        <p>
+          這個案例讓我更清楚理解，
+          Container Networking 並不是獨立存在的設定項目。
+          當 Kubernetes 與實體測試設備整合時，
+          CNI、Linux Networking、Physical NIC、
+          DHCP 與 DUT Network 都會共同影響最終行為。
+        </p>
+
+        <p>
+          相較於直接尋找單一指令或設定，
+          我更傾向先建立系統模型、確認各層責任與資料路徑，
+          再透過 Survey、PoC 與逐層驗證縮小問題範圍。
+          這也成為我後續處理平台、網路與效能問題時的重要方法。
+        </p>
+
+
+        <div class="public-note">
+
+          <strong>PUBLIC PORTFOLIO NOTE</strong>
+
+          <p>
+            本案例僅呈現一般化的技術問題、公開技術與架構思路。
+            實際企業網路資訊、產品識別資訊、內部設定、
+            原始碼與非公開測試資料均未揭露。
+          </p>
+
+        </div>
+
+
+        <a class="button secondary case-back-button"
+           href="./index.html#work">
+          ← Back to Selected Work
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+
+    <div class="container footer-inner">
+      <p>© Hsin · Engineering Portfolio</p>
+      <p>Systems · Platform · Networking · Automation</p>
+    </div>
+
+  </footer>
+
+</body>
+</html>
